@@ -1,0 +1,79 @@
+\documentclass[aps,prl,twocolumn,groupedaddress]{revtex4-1}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+
+
+\begin{document}
+
+\title{Covariance Matrix Resolution Calculations}
+\author{Patrick Nave}
+\maketitle
+
+\section{Introduction}
+
+The purpose of this guide is to provide a brief review of the mathematics and relevant experimental context using the covariance matrix resolution program.
+
+\section{Derivation}
+
+Consider a set of m functions $\{f_1, ..., f_m\}$ which each depend on a set of n random variables $\{x_1, ..., x_n\}$.  We define the Jacobian matrix of our system to be
+
+\begin{equation}
+J = 
+\begin{bmatrix}
+    \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \dots  & \frac{\partial f_1}{\partial x_n} \\
+    \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \dots  & \frac{\partial f_2}{\partial x_n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \frac{\partial f_m}{\partial x_1} & \frac{\partial f_m}{\partial x_2} & \dots  & \frac{\partial f_m}{\partial x_n}
+\end{bmatrix}
+\end{equation}
+
+If the assumption is made that each of our n random variables is normally distributed, not necessarily independently of the others, then we have a well-defined, although possibly difficult to compute, covariance matrix $\Sigma_{\mathbf{x}}$ which describes the joint distribution.
+
+Again operating under simplifying assumptions, we assume the covariance matrix $\Sigma_{\mathbf{x}}$ describes linear deviations, and thus we compute an approximate covariance matrix, $\Sigma$, for the m variables described by our m functions $f_k$ as follows:
+
+\begin{equation}
+\Sigma = J \Sigma_{\mathbf{x}} J^T
+\end{equation}
+
+which yields an m x m covariance matrix for our system.
+
+\subsection{ARCS}
+
+\textbf{Pertinent Experimental Variables:}
+\begin{itemize}
+\item $L_{sp} = $ (m) distance from sample to detector pixel
+
+\item $L_{12} = $ (m) distance between beam monitors 1 and 2
+
+\item $L_{ms} = $ (m) distance from moderator to sample position
+
+\item $t_{12} = $ (s) time for a neutron to travel from beam monitor 1 to monitor 2
+
+\item $t_{ms} = $ (s) time for neutron to travel from moderator to sample
+
+\item $t_{sp} = $ (s) time for neutron to travel from sample to detector pixel
+
+\item $v_{i,f} = $ (m/s) initial (resp., final) neutron velocity
+
+\item $E_{i,f} = $ (m/s) initial (resp., final) neutron velocity
+
+\item $Q_{x,y,z} = $ x (resp. y, resp. z) component of neutron wavevector in instrumental beam coordinates (z along beam, y vertical, x completing right-hand coordinate system)
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{ARCS Instrument Parameters}
+\begin{tabular}{|c|c|}
+\hline
+Instrument Parameters & Values \\ \hline
+$L_{sp}$ & (event dependent) \\ \hline
+$L_{12}$ & 6.67 m \\ \hline
+$L_{ms}$ & 13.60 m \\ \hline
+
+\end{tabular}
+\end{table}
+
+
+\end{document}
