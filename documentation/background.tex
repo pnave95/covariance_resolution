@@ -13,9 +13,11 @@
 
 \section{Introduction}
 
-The purpose of this guide is to provide a brief review of the mathematics and relevant experimental context using the covariance matrix resolution program.
+The purpose of this guide is to provide a brief review of the mathematics and relevant experimental context using the covariance matrix resolution program.  The derivation is specifically given for the case of the ARCS instrument, although it could easily be adapted for other time-of-flight direct geometry neutron spectrometers.
 
 \section{Derivation}
+
+\subsection{Covariance Matrix}
 
 Consider a set of m functions $\{f_1, ..., f_m\}$ which each depend on a set of n random variables $\{x_1, ..., x_n\}$.  We define the Jacobian matrix of our system to be
 
@@ -60,7 +62,13 @@ which yields an m x m covariance matrix for our system.
 \item $E_{i,f} = $ (m/s) initial (resp., final) neutron velocity
 
 \item $Q_{x,y,z} = $ x (resp. y, resp. z) component of neutron wavevector in instrumental beam coordinates (z along beam, y vertical, x completing right-hand coordinate system)
+
+\item $\theta = $ polar angle (relative to z-axis, the beam axis)
+
+\item $\phi = $ azimuthal angle
+
 \end{itemize}
+
 
 \begin{table}[H]
 \centering
@@ -74,6 +82,114 @@ $L_{ms}$ & 13.60 m \\ \hline
 
 \end{tabular}
 \end{table}
+
+\subsection{ARCS Error Propagation}
+
+If $t_{1,2}$ is the neutron time-of-flight at beam monitor 1 and 2 locations, then $t_12 = t_2 - t_1$ is the time to travel from the first to second beam monitor, and the distribution function for $t_{12}$ can easily be found by numerical convolution of the experimental monitor measurement data.  If this distribution is approximated by a Gaussian, we obtain the variance $\sigma_{t_{12}}^2$.  We can then compute the initial velocity of the neutron to be $v_i = L_{12} / t_{12}$, with derivative
+
+$$
+\frac{dv_i}{dt_{12}} = \frac{-L_{12}}{t_{12}^2}
+$$
+
+Where the distance $L_{12}$ is assumed to be known perfectly for simplification.
+
+The time for a neutron to travel from the moderator to the sample, $t_{ms}$, can be computed as follows:
+
+$$
+t_{ms} = \frac{L_{ms}}{v_i} = \frac{t_{12}L_{ms}}{L_{12}}
+$$
+
+and the derivative with respect to $t_{12}$ is given by
+
+$$
+\frac{dt_{ms}}{dt_{12}} = \frac{L_{ms}}{L_{12}}
+$$
+
+The time for the neutron to travel from the sample to the pixel is $t_{sp} = t - t_{ms}$, where t is the  total time-of-flight.  The derivative, again with respect to $t_{12}$, is
+
+$$
+\frac{dt_{sp}}{dt_{12}} = - \frac{dt_{ms}}{dt_{12}} = \frac{-L_{ms}}{L_{12}}
+$$
+
+Once the value of $t_{sp}$ is known, the final (scattered) neutron velocity can be computed as
+
+$$
+v_f = \frac{L_{sp}}{t_{sp}} = \frac{L_{sp}}{t - t_{ms}} = \frac{L_{sp}}{t - t_{12} \frac{L_{ms}}{L_{12}}}
+$$
+
+And the derivative is
+
+$$
+\frac{dv_f}{dt_{12}} = \frac{L_{sp} L_{ms}}{L_{12}(t - t_{12} \frac{L_{ms}}{L_{12}})^2}
+$$
+
+The x, y, and z components of the wavevector can then be formulated, along with their partial derivatives:
+
+$$
+Q_z = \left( \frac{m}{\hbar} \right)(v_f cos \theta - v_i)
+$$
+
+$$
+\frac{\partial Q_z}{\partial t_{12}} = \left( \frac{m}{\hbar} \right)(\frac{\partial v_f}{\partial t_{12}} cos \theta - \frac{\partial v_i}{\partial t_{12}})
+$$
+
+$$
+\frac{\partial Q_z}{\partial \theta} = \left( \frac{ m}{\hbar} \right)(- v_f sin \theta )
+$$
+
+$$
+Q_x = \left( \frac{m}{\hbar} \right)v_f sin \theta cos \phi
+$$
+
+$$
+\frac{\partial Q_x}{\partial t_{12}} = \left( \frac{m}{\hbar} \right)\frac{\partial v_f}{\partial t_{12}} sin \theta cos \phi
+$$
+
+$$
+\frac{\partial Q_x}{\partial \theta} = \left( \frac{m}{\hbar} \right)v_f cos \theta cos \phi
+$$
+
+$$
+\frac{\partial Q_x}{\partial \phi} = \left( \frac{m}{\hbar} \right)(- v_f sin \theta sin \phi)
+$$
+%% Q_y
+$$
+Q_y = \left( \frac{m}{\hbar} \right)v_f sin \theta sin \phi
+$$
+
+$$
+\frac{\partial Q_y}{\partial t_{12}} = \left( \frac{m}{\hbar} \right)\frac{\partial v_f}{\partial t_{12}} sin \theta sin \phi
+$$
+
+$$
+\frac{\partial Q_y}{\partial \theta} = \left( \frac{m}{\hbar} \right)v_f cos \theta sin \phi
+$$
+
+$$
+\frac{\partial Q_x}{\partial \phi} = \left( \frac{m}{\hbar} \right) v_f sin \theta cos \phi
+$$
+
+And finally, we compute the initial energy, final energy, and energy transfer, along with the derivative of the energy transfer:
+
+$$
+E_i = (1/2)m v_i^2
+$$
+
+$$
+E_f = (1/2)m v_f^2
+$$
+
+$$
+E = E_i - E_f = (1/2)m(v_i^2 - v_f^2)
+$$
+
+$$
+\frac{dE}{dt_{12}} = m \left(v_i \frac{\partial v_i}{\partial t_{12}} - v_f \frac{\partial v_f}{t_{12}} \right)
+$$
+
+Where the energy transfer obviously has no dependence on the spherical anglular coordinates, just as $Q_z$ had no dependence on the azimuthal angle.
+
+Using the partial derivatives described here, along with a 3 x 3 covariance matrix of instrumental uncertainty parameters for $t_{12}$, $\theta$, and $\phi$, one can construct the Jacobian and instrumental covariance matrix described in the Covariance Matrix subsection above and thus compute the approximation for the covariance matrix of the experimental variable of interest, $(Q_x, Q_y, Q_z, E)^T$.
 
 
 \end{document}
