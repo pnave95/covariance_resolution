@@ -154,7 +154,7 @@ def setup_jacobian(vi, vf, Ei, Ef, theta, phi, L12, Lms, Lsp, tof, t12, debugMod
 
 	E_t12 = E_partial_t12(vi, vf, vi_t12, vf_t12)
 	if debugMode == 1:
-		print "E_partial_t12 = " + str(E_t12) + "\n"
+		print ("E_partial_t12 = " + str(E_t12) + "\n")
 
 	E_theta = 0.0
 	E_phi = 0.0
@@ -211,6 +211,6 @@ if __name__ == "__main__":
 
 	J = setup_jacobian(vi, vf, Ei, Ef, theta, phi, L12, Lms, Lsp, tof, t12)
 
-	print "J = "
-	print J
-	print "\n"
+	print ("J = ")
+	print (J)
+	print ("\n")

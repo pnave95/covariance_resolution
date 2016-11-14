@@ -9,9 +9,11 @@ from numpy import linalg as LA
 import compute_vQ_to_HKL_basis_change_matrix as HKL_basis
 
 
+
 def setup_params_matrix(var_t12, var_theta, var_phi):
 	M = np.array([[var_t12, 0.0, 0.0], [0.0, var_theta, 0.0], [0.0, 0.0, var_phi]])
 	return M
+
 
 def get_sigma_vQE(J, M):
 	J_T = np.transpose(J)
@@ -22,10 +24,12 @@ def get_sigma_vQE(J, M):
 
 	return Sigma
 
+
 def get_sigma_inv_vQE(J, M):
 	Sigma = get_sigma_vQE(J,M)
 	SigmaInv = LA.inv(Sigma)
 	return SigmaInv
+
 
 '''
 Description:
@@ -55,9 +59,14 @@ def get_sigma_HKLE(Sigma_vQE, lattice_param_vectors, uList, vList, angle, debugM
 	return SigmaHKLE
 
 
+
+
 def get_sigma_inv_HKLE(SigmaHKLE):
 	SigmaInv = LA.inv(SigmaHKLE)
 	return SigmaInv
+
+
+
 
 
 
@@ -80,8 +89,8 @@ if __name__ == "__main__":
 
 	basis_change = HKL_basis.HKL_basis_change_matrix(lattice, u, v, angle,1)
 
-	print "change of basis matrix  = \n"
-	print basis_change
+	print ("change of basis matrix  = \n")
+	print (basis_change)
 
 	import ARCS_error_propagation as arcs
 	Lms = 13.60
@@ -117,29 +126,29 @@ if __name__ == "__main__":
 
 	J = arcs.setup_jacobian(vi, vf, Ei, Ef, theta, phi, L12, Lms, Lsp, tof, t12)
 
-	print "J = "
-	print J
-	print "\n"
+	print ("J = ")
+	print (J)
+	print ("\n")
 
 	M = setup_params_matrix(var_t12, var_theta, var_phi)
-	print "M = "
-	print M
-	print "\n"
+	print ("M = ")
+	print (M)
+	print ("\n")
 
 	Sigma_vQE = get_sigma_vQE(J, M)
-	print "Sigma_vQE = "
-	print Sigma_vQE
-	print "\n"
+	print ("Sigma_vQE = ")
+	print (Sigma_vQE)
+	print ("\n")
 
 	Sigma_HKLE = get_sigma_HKLE(Sigma_vQE, lattice, u, v, angle)
-	print "Sigma_HKLE = "
-	print Sigma_HKLE
-	print "\n"
+	print ("Sigma_HKLE = ")
+	print (Sigma_HKLE)
+	print ("\n")
 
 	SigmaInv_HKLE = get_sigma_inv_HKLE(Sigma_HKLE)
-	print "SigmaInv_HKLE = "
-	print SigmaInv_HKLE
-	print "\n"
+	print ("SigmaInv_HKLE = ")
+	print (SigmaInv_HKLE)
+	print ("\n")
 
 
 	# test display
@@ -147,7 +156,10 @@ if __name__ == "__main__":
 	x1 = 2
 	x2 = 3
 	A = plot_cov.get_2D_subcovariance(Sigma_vQE, x1, x2)
-	print "A = "
-	print A
-	print "\n"
-	plot_cov.plot_quadform(A, x1, x2, "Qz deviation (A^-1)", "E deviation (meV)")
+	print ("A = ")
+	print (A)
+	print ("\n")
+	k = 2
+	alpha = 0.5
+	chi2 = plot_cov.get_critical_chi_squared(k, alpha)
+	plot_cov.plot_quadform(A, x1, x2, chi2, "Qz deviation (A^-1)", "E deviation (meV)")

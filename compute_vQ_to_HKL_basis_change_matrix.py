@@ -133,5 +133,5 @@ if __name__ == "__main__":
 
 	basis_change = HKL_basis_change_matrix(lattice, u, v, angle,1)
 
-	print "change of basis matrix = \n"
-	print basis_change
+	print ("change of basis matrix = \n")
+	print (basis_change)
