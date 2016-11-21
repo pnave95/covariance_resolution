@@ -11,9 +11,12 @@ import compute_vQ_to_HKL_basis_change_matrix as HKL_basis
 import ARCS_error_propagation as arcs
 
 
-
-
-def HKLE_to_instrumentCoords(lattice, u, v, sample_angle, HKLE, Ei_meV, L12, debugMode=1):
+'''
+Description:
+	Returns:
+		instrument_coords:  [theta, phi, t12, tof], where theta is the spherical polar angle of the detector pixel, phi is the azimuthal angle, t12 is the time between detector pixel 1 and 2, and tof is the time-of-flight (seconds)
+'''
+def HKLE_to_instrumentCoords(lattice, u, v, sample_angle, HKLE, Ei_meV, L12, Lms, Lsp, debugMode=1):
 
 	# extract H,K,L,E values (left in inverse Angstrom units)
 	# H = HKLE[0]
@@ -58,10 +61,13 @@ def HKLE_to_instrumentCoords(lattice, u, v, sample_angle, HKLE, Ei_meV, L12, deb
 	# azimuthal angle of detector pixel
 	phi = np.arccos(Qx_tmp2)
 
-	# compute t12
+	# compute t12 (seconds)
 	t12 = L12 / vi
 
-	instrument_coords = [theta, phi, t12]
+	# now, compute tof (seconds)
+	tof = (Lms / vi) + (Lsp / vf)
+
+	instrument_coords = [theta, phi, t12, tof]
 
 	return instrument_coords
 
@@ -69,11 +75,13 @@ def HKLE_to_instrumentCoords(lattice, u, v, sample_angle, HKLE, Ei_meV, L12, deb
 
 
 
+
 ##########################
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
 	# do something to test
+
 
 
 
