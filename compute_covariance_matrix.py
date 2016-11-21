@@ -9,12 +9,6 @@ from numpy import linalg as LA
 import compute_vQ_to_HKL_basis_change_matrix as HKL_basis
 
 
-
-def setup_params_matrix(var_t12, var_theta, var_phi):
-	M = np.array([[var_t12, 0.0, 0.0], [0.0, var_theta, 0.0], [0.0, 0.0, var_phi]])
-	return M
-
-
 def get_sigma_vQE(J, M):
 	J_T = np.transpose(J)
 
@@ -92,45 +86,25 @@ if __name__ == "__main__":
 	print ("change of basis matrix  = \n")
 	print (basis_change)
 
-	import ARCS_error_propagation as arcs
-	Lms = 13.60
-	L12 = 18.50 - 11.83
-
-	# m = mass of neutron (kg)
-	m = 1.674929*(10**-27)
-
-	# hbar = reduced Planck's constant (J s)
-	hbar = 1.0545718*(10**-34)
+	import ARCS_error_analysis as arcs
 
 	# test parameters
-	tof = 3900.9			# microseconds
-	t = tof*10**-6
-	Lsp = 3.44735 			# meters
+	t = 3900.9				# microseconds
+	tof = t*10**-6 			# seconds
 	theta = 2.24506			# radians (polar)
 	phi = 0.0 - 0.56543		# radians (azimuthal)
-	Ei_meV_expected = 100.0
-	Ei = arcs.meV_to_joules(Ei_meV_expected)
-	vi = arcs.vi_from_Ei(Ei)
-	t12 = arcs.t12_from_vi(vi)
-	vf = arcs.vf_from_tof_and_t12(t, t12, Lsp, Lms, L12)
-	Ef = 0.5*m*vf**2
+	
+	Ei_meV = 150.0
 
-	# (guessed) uncertainties:
-	sigma_t12 = 10.0*10**-6
-	sigma_theta = 1.5 / 360.0 * 2.0*np.pi
-	sigma_phi = 1.5 / 360.0 * 2.0*np.pi
+	JM = arcs.get_jacobian_and_params_matrices_from_event_data(tof, theta, phi, Ei_meV)
 
-	var_t12 = sigma_t12**2
-	var_theta = sigma_theta**2
-	var_phi = sigma_phi**2
-
-	J = arcs.setup_jacobian(vi, vf, Ei, Ef, theta, phi, L12, Lms, Lsp, tof, t12)
+	J = JM[0]
+	M = JM[1]
 
 	print ("J = ")
 	print (J)
 	print ("\n")
 
-	M = setup_params_matrix(var_t12, var_theta, var_phi)
 	print ("M = ")
 	print (M)
 	print ("\n")
