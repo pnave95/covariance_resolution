@@ -9,7 +9,7 @@ Notes:
 	Currently, this program considers the quantity "Lsp" (distance, or length of beam travel, from the sample to the pixel) to be fixed by default, with an uncertainty which is also set to some default value.
 		Eventually, I would like to automatically look up pixel location (radial spherical coordinate = Lsp) to more accurately estimate this value
 
-Status: Working
+Status: Tentatively complete
 '''
 
 # import required modules

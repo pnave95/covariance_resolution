@@ -8,7 +8,7 @@ Status:  INCOMPLETE / NON-FUNCTIONAL
 import numpy as np
 from numpy import linalg as LA 
 import compute_vQ_to_HKL_basis_change_matrix as HKL_basis
-import ARCS_error_propagation as arcs
+import ARCS_error_analysis as arcs
 
 
 '''
@@ -42,8 +42,8 @@ def HKLE_to_instrumentCoords(lattice, u, v, sample_angle, HKLE, Ei_meV, L12, Lms
 	Ef = arcs.meV_to_joules(Ef_meV)
 
 	# compute initial and final speeds (m/s)
-	vi = arcs.vi_from_Ei(Ei)
-	vf = arcs.vi_from_Ei(Ef)
+	vi = arcs.get_v_from_E(Ei)
+	vf = arcs.get_v_from_E(Ef)
 
 	# compute instrument coordinates corresponding to the specified vQE point, for the given sample rotation angle and Ei
 

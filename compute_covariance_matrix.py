@@ -61,8 +61,27 @@ def get_sigma_inv_HKLE(SigmaHKLE):
 
 
 
+'''
+Description:
+	Summary:  This function takes two given independent vectors, x and y, in HKLE or vQE space, and then computes a 2-D covariance matrix of x and y
+'''
+def get_2D_sliced_covariance(Sigma, x, y=np.array([0.0, 0.0, 0.0, 1.0])):
+
+	x = x / np.linalg.norm(x)
+	y = y / np.linalg.norm(y)
+
+	# make 2x4 matrix to map 4-D HKLE or vQE space into a 2D subspace
+	transform = np.stack((x,y))
+
+	Reduced_Sigma = np.dot(transform, Sigma)
+	Reduced_Sigma = np.dot(Reduced_Sigma, np.transpose(transform))
+
+	return Reduced_Sigma
 
 
+def get_2D_sigma_inv(Sigma_Reduced):
+	SigmaInv = LA.inv(Sigma_Reduced)
+	return SigmaInv
 
 ##############################
 
@@ -125,6 +144,12 @@ if __name__ == "__main__":
 	print ("\n")
 
 
+	# test 4D -> 2D covariance reduction
+	Reduced_Sigma = get_2D_sliced_covariance(Sigma_HKLE, np.array([2.0, 2.0, 0.0, 0.0]))
+	print("Reduced_Sigma = ")
+	print(Reduced_Sigma)
+
+
 	# test display
 	import plot_covariance_ellipse as plot_cov
 	x1 = 2
@@ -136,4 +161,5 @@ if __name__ == "__main__":
 	k = 2
 	alpha = 0.5
 	chi2 = plot_cov.get_critical_chi_squared(k, alpha)
+
 	plot_cov.plot_quadform(A, x1, x2, chi2, "Qz deviation (A^-1)", "E deviation (meV)")

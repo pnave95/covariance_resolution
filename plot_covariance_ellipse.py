@@ -16,6 +16,7 @@ def get_critical_chi_squared(k, alpha):
 	chi2 = sp.chdtri(k,alpha)
 	return chi2
 
+#DEPRECATED: by the more versatile 2D slicing/reduction function is included in compute_covariance_matrix.py
 # Extract 2x2 submatrix from covariance matrix for plotting
 def get_2D_subcovariance(C, x1, x2):
 
@@ -28,6 +29,7 @@ def get_2D_subcovariance(C, x1, x2):
 
 	return A
 
+#def get_Q_slice_vector(c1, c2, c3, )
 
 # plot 2x2 quadratic form matrix A
 def plot_quadform(A, x1, x2, chi2, x1_title, x2_title, debugMode=1):
@@ -84,10 +86,9 @@ def plot_quadform(A, x1, x2, chi2, x1_title, x2_title, debugMode=1):
 	plt.savefig("testing")
 	plt.show()
 
-
+#alternative version (this produces ellipses which appear more segmented for some reason)
 def plot_quadform_method2(A, x1, x2, chi2, x1_title, x2_title, debugMode=1):
 
-	#alternative version (this produces ellipses which appear more segmented for some reason)
 	Ainv = LA.inv(A)
 	print ("A^-1 = \n")
 	print (Ainv)
