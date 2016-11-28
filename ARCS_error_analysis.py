@@ -42,9 +42,9 @@ L12 = 18.50 - 11.83		# meters
 
 ######################################
 # define instrumental parameter uncertainties
-sigma_t12 = 10.0*10**-6 				# seconds
-sigma_theta = 1.5 / 360.0 * 2.0*np.pi 	# radians
-sigma_phi = 1.5 / 360.0 * 2.0*np.pi 	# radians
+sigma_t12 = 2.5*10**-6 				# seconds
+sigma_theta = 0.25 / 360.0 * 2.0*np.pi 	# radians
+sigma_phi = 0.25 / 360.0 * 2.0*np.pi 	# radians
 sigma_Lsp = 0.01						# meters
 
 var_t12 = sigma_t12**2
