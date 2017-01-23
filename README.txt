@@ -1,0 +1,1 @@
+"covariance_resolution" is a set of routines and programs designed for analyzing the resolution of a time-of-flight direct geometry neutron spectrometer using linear Gaussian covariance matrix methods.

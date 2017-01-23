@@ -77,16 +77,20 @@ def plot_quadform(A, x1, x2, chi2, x1_title, x2_title, debugMode=1):
 	x = X[0,:]
 	y = X[1,:]
 
+	# temporary
+	
+
 	# plotting
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
 	ax.set_xlabel(x1_title)
 	ax.set_ylabel(x2_title)
 	plt.plot(x,y)
+	#plt.xlim([-.5,.5]) # experimental -- 01/12/17
 	plt.savefig("testing")
 	plt.show()
 
-#alternative version (this produces ellipses which appear more segmented for some reason)
+#alternative version (not working?) (this produces ellipses which appear more segmented for some reason)
 def plot_quadform_method2(A, x1, x2, chi2, x1_title, x2_title, debugMode=1):
 
 	Ainv = LA.inv(A)
