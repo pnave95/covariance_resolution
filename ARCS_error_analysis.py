@@ -34,7 +34,7 @@ Lms = 13.60				# meters
 
 # Lsp = length along beam from sample to pixel
 # TODO: get this from pixel data
-default_Lsp = 3.2		# meters
+default_Lsp = 3.0		# meters
 
 # distance between beam monitors
 L12 = 18.50 - 11.83		# meters
@@ -45,7 +45,7 @@ L12 = 18.50 - 11.83		# meters
 sigma_t12 = 2.5*10**-6 				# seconds
 sigma_theta = 0.25 / 360.0 * 2.0*np.pi 	# radians
 sigma_phi = 0.25 / 360.0 * 2.0*np.pi 	# radians
-sigma_Lsp = 0.01						# meters
+sigma_Lsp = 0.015						# meters
 
 var_t12 = sigma_t12**2
 var_theta = sigma_theta**2
@@ -102,6 +102,12 @@ def get_vf_from_tof_t12_Lsp(tof, t12, Lsp):
 def get_vf_from_tms_Lsp(tms, Lsp):
 	vf = Lsp / tms
 	return vf
+
+# TODO: handle the case where this becomes infinite (near vertical scattering)
+def get_Lsp_from_pixel_angles(theta, phi):
+	s = np.sin(theta) * np.cos(phi - np.pi/2.0)
+	Lsp = default_Lsp / np.sqrt(1.0 - s**2)
+	return Lsp
 
 ######################################
 # compute primary vQE variables
@@ -214,6 +220,8 @@ def E_partial_Lsp(vf_Lsp, vf):
 
 # Set up matrix (Jacobian)
 def setup_jacobian(vi, vf, theta, phi, tof, t12, Lsp=default_Lsp, debugMode=1):
+
+	Lsp = get_Lsp_from_pixel_angles(theta, phi)
 	
 	E = get_E_J(vf, vi)
 	tms = get_tms_from_vi(vi)
@@ -280,6 +288,8 @@ def setup_params_matrix():
 
 
 def get_jacobian_and_params_matrices_from_event_data(tof, theta, phi, Ei_meV, Lsp=default_Lsp, debugMode=1):
+
+	Lsp = get_Lsp_from_pixel_angles(theta, phi)
 
 	Ei = meV_to_joules(Ei_meV)
 	vi = get_v_from_E(Ei)
